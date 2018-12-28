@@ -1,0 +1,38 @@
+{
+  "name": "intouch/laravel-aws-lambda",
+  "description": "Laravel support for AWS Lambda.",
+  "keywords": [
+    "laravel",
+    "aws",
+    "lambda",
+    "queue",
+    "api gateway",
+    "artisan"
+  ],
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Intouch\\LaravelAwsLambda\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Intouch\\LaravelAwsLambda\\Tests\\": "tests"
+    }
+  },
+  "require": {
+    "illuminate/support": ">5.1.0 <5.4",
+    "aws/aws-sdk-php": "^3.20.6"
+  },
+  "require-dev": {
+    "mockery/mockery": "^0.9.6",
+    "laravel/framework": ">5.1.0 <5.2",
+    "phpunit/phpunit": "~4.8",
+    "squizlabs/php_codesniffer": "^2.8",
+    "scrutinizer/ocular": "^1.3"
+  },
+  "scripts": {
+    "cs": "phpcs --standard=psr2 src/",
+    "test": "phpunit"
+  }
+}
