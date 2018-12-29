@@ -2,7 +2,7 @@
 
 namespace Intouch\LaravelAwsLambda\Contracts;
 
-abstract class Handler
+abstract class Handler implements IHandler
 {
     protected $payload;
 

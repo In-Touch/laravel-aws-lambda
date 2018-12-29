@@ -21,8 +21,8 @@ class Sqs extends Handler
         $worker->process('lambda', $job);
     }
 
-    public function canHandle($payload)
+    public function canHandle()
     {
-        return array_key_exists('eventSource', $payload) && $payload['eventSource'] == 'aws:sqs';
+        return array_key_exists('eventSource', $this->payload) && $this->payload['eventSource'] == 'aws:sqs';
     }
 }

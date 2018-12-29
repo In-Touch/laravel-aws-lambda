@@ -17,7 +17,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Intouch\\LaravelAwsLambda\\Tests\\": "tests"
+      "Intouch\\LaravelAwsLambda\\Test\\": "test"
     }
   },
   "require": {

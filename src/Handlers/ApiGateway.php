@@ -12,12 +12,12 @@ class ApiGateway extends Handler
 {
 
 
-    public function canHandle($payload)
+    public function canHandle()
     {
         if (
-            array_key_exists('body', $payload) &&
-            array_key_exists('path', $payload) &&
-            array_key_exists('headers', $payload)
+            array_key_exists('body', $this->payload) &&
+            array_key_exists('path', $this->payload) &&
+            array_key_exists('headers', $this->payload)
         ) {
             return true;
         }

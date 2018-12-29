@@ -7,16 +7,16 @@ use Intouch\LaravelAwsLambda\Contracts\Handler;
 
 class Artisan extends Handler
 {
-    public function canHandle($payload)
+    public function canHandle()
     {
-        return array_key_exists('command', $payload);
+        return array_key_exists('command', $this->payload);
     }
 
     public function handle(Kernel $kernel)
     {
         $result = $kernel->call($this->payload['command']);
 
-        $kernel->terminate(null, null);
+        $kernel->terminate(null, $result);
 
         return $result;
     }
