@@ -10,8 +10,6 @@ use Intouch\LaravelAwsLambda\Contracts\Handler;
 
 class ApiGateway extends Handler
 {
-
-
     public function canHandle()
     {
         if (

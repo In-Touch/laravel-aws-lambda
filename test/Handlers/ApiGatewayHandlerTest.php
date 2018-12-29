@@ -2,8 +2,8 @@
 
 namespace Intouch\LaravelAwsLambda\Test\Handlers;
 
-use Intouch\LaravelAwsLambda\Handlers\ApiGateway;
 use Intouch\LaravelAwsLambda\Test\TestCase;
+use Intouch\LaravelAwsLambda\Handlers\ApiGateway;
 
 class ApiGatewayHandlerTest extends TestCase
 {
@@ -74,7 +74,6 @@ class ApiGatewayHandlerTest extends TestCase
     /** @test */
     public function can_handle_a_valid_api_gateway_message()
     {
-
         $payload = json_decode($this->validJson, true);
 
         $handler = new ApiGateway($payload);
@@ -82,22 +81,26 @@ class ApiGatewayHandlerTest extends TestCase
     }
 
     /** @test */
-    public function creates_a_valid_request_object(){
+    public function creates_a_valid_request_object()
+    {
         $this->markTestIncomplete('should refactor out into helper, and test');
     }
 
     /** @test */
-    public function converts_a_response_object() {
+    public function converts_a_response_object()
+    {
         $this->markTestIncomplete();
     }
 
     /** @test */
-    public function converts_a_json_response_object() {
+    public function converts_a_json_response_object()
+    {
         $this->markTestIncomplete();
     }
 
     /** @test */
-    public function handles_payload() {
+    public function handles_payload()
+    {
         $this->markTestIncomplete('should test the returned response that comes out of the mock is sent up');
     }
 }

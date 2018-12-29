@@ -7,7 +7,6 @@ use Intouch\LaravelAwsLambda\Test\TestCase;
 
 class SqsHandlerTest extends TestCase
 {
-
     // For testing we strip the Records[] off the record, and inject only the record
     // because of how the Executor strips that out and passes through individual
     // records.
@@ -32,7 +31,6 @@ class SqsHandlerTest extends TestCase
     /** @test */
     public function can_handle_a_valid_sqs_message()
     {
-
         $payload = json_decode($this->validJson, true);
 
         $handler = new Sqs($payload);
