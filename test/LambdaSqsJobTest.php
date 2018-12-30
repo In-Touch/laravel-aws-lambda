@@ -85,11 +85,37 @@ class LambdaSqsJobTest extends TestCase
     }
 
     /** @test */
+    public function it_should_return_attempts_as_integer_with_uppercase_attributes()
+    {
+        $payload = json_decode($this->validJson, true);
+        $payload['Attributes'] = $payload['attributes'];
+        unset($payload['attributes']);
+
+        $job = new LambdaSqsJob(\Mockery::mock('Illuminate\Container\Container'), $payload);
+
+        $this->assertArrayNotHasKey('attributes', $payload);
+        $this->assertEquals(1, $job->attempts());
+    }
+
+    /** @test */
     public function it_should_return_job_id()
     {
         $payload = json_decode($this->validJson, true);
         $job = new LambdaSqsJob(\Mockery::mock('Illuminate\Container\Container'), $payload);
 
+        $this->assertEquals('19dd0b57-b21e-4ac1-bd88-01bbb068cb78', $job->getJobId());
+    }
+
+    /** @test */
+    public function it_should_return_job_id_from_uppercase_message_id()
+    {
+        $payload = json_decode($this->validJson, true);
+        $payload['MessageId'] = $payload['messageId'];
+        unset($payload['messageId']);
+
+        $job = new LambdaSqsJob(\Mockery::mock('Illuminate\Container\Container'), $payload);
+
+        $this->assertArrayNotHasKey('messageId', $payload);
         $this->assertEquals('19dd0b57-b21e-4ac1-bd88-01bbb068cb78', $job->getJobId());
     }
 
