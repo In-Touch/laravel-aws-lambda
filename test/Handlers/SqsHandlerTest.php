@@ -42,11 +42,13 @@ class SqsHandlerTest extends TestCase
     public function invokes_the_worker_process_on_a_sqs_job()
     {
         $worker = \Mockery::mock('Illuminate\Queue\Worker');
-        $worker->shouldReceive('process')->once();
+        $worker->shouldReceive('process')->once()->andReturn(['job' => 'jobObjectHere', 'failed' => false]);
 
         $payload = json_decode($this->validJson, true);
 
         $handler = new Sqs($payload);
-        $handler->handle(\Mockery::mock('Illuminate\Container\Container'), $worker);
+        $return = $handler->handle(\Mockery::mock('Illuminate\Container\Container'), $worker);
+
+        $this->assertEquals(['job' => 'jobObjectHere', 'failed' => false], $return);
     }
 }

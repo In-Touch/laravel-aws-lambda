@@ -2,8 +2,8 @@
 
 namespace Intouch\LaravelAwsLambda\Test\Handlers;
 
-use Intouch\LaravelAwsLambda\Test\TestCase;
 use Intouch\LaravelAwsLambda\Handlers\Artisan;
+use Intouch\LaravelAwsLambda\Test\TestCase;
 
 class ArtisanHandlerTest extends TestCase
 {
@@ -31,6 +31,9 @@ class ArtisanHandlerTest extends TestCase
         $payload = json_decode($this->validJson, true);
 
         $handler = new Artisan($payload);
-        $handler->handle($kernel);
+        $retval = $handler->handle($kernel);
+
+        // Artisan commands should return an exit code of 0
+        $this->assertEquals(0, $retval);
     }
 }
