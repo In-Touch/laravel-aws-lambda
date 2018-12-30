@@ -16,11 +16,10 @@ class Executor
      */
     protected $app;
 
-    public function __construct($app)
+    public function __construct(Container $app)
     {
         $this->app = $app;
-
-        $this->handlers = config('aws-lambda.handlers');
+        $this->handlers = $app->make('config')->get('aws-lambda.handlers');
     }
 
     public function handle($payload)
