@@ -39,7 +39,6 @@ class ApiGateway extends Handler
         return $this->prepareResponse($response);
     }
 
-
     public function createRequest($uri)
     {
         return Request::create(
@@ -109,6 +108,7 @@ class ApiGateway extends Handler
     /**
      * Turn the given URI into a fully qualified URL.
      *
+     * @param Container $app
      * @return string
      */
     public function prepareUrlForRequest(Container $app)

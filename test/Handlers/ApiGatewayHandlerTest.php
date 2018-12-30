@@ -234,12 +234,16 @@ class ApiGatewayHandlerTest extends TestCase
      */
     public function it_correctly_converts_request_uri_to_parsable_uri($path, $expectation)
     {
-        $payload = [
-            'path' => $path,
-        ];
-        $handler = new ApiGateway($payload);
+        $container = \Mockery::mock('Illuminate\Container\Container');
+        $container->shouldReceive('make')->once()->with('config')
+            ->andReturn($config = \Mockery::mock('Illuminate\Config\Repository'));
+        $config->shouldReceive('get')->once()->with('app.url')->andReturn('http://localhost');
 
-        $this->assertEquals($expectation, $handler->prepareUrlForRequest('http://localhost'));
+        $handler = new ApiGateway([
+            'path' => $path,
+        ]);
+
+        $this->assertEquals($expectation, $handler->prepareUrlForRequest($container));
     }
 
     public function prepareUrlProvider()
