@@ -103,12 +103,13 @@ class LambdaSqsJobTest extends TestCase
         $this->assertEquals($container, $job->getContainer());
     }
 
+    /** @test */
     public function it_should_return_raw_sqs_job()
     {
         $payload = json_decode($this->validJson, true);
         $container = \Mockery::mock('Illuminate\Container\Container');
         $job = new LambdaSqsJob($container, $payload);
 
-        $this->assertEquals($payload, $job->getRawBody());
+        $this->assertEquals($payload, $job->getSqsJob());
     }
 }
