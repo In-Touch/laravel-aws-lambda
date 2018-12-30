@@ -32,20 +32,22 @@ class ApiGateway extends Handler
 
     public function handle(Container $app)
     {
-        $this->app = $app;
+        $uri = $this->prepareUrlForRequest($app);
+        $request = $this->createRequest($uri);
+        $response = $this->runThroughKernel($app, $request);
 
-        $uri = $this->prepareUrlForRequest($this->payload['path']);
+        return $this->prepareResponse($response);
+    }
 
-        $request = Request::create(
+
+    public function createRequest($uri)
+    {
+        return Request::create(
             $uri, $this->payload['httpMethod'],
             $this->payload['queryStringParameters'] !== null ? $this->payload['queryStringParameters'] : [],
             [], [], $this->transformHeadersToServerVars($this->payload['headers']),
             $this->getBodyFromPayload()
         );
-
-        $response = $this->runThroughKernel($request);
-
-        return $this->prepareResponse($response);
     }
 
     public function getBodyFromPayload()
@@ -57,9 +59,9 @@ class ApiGateway extends Handler
         return $this->payload['body'];
     }
 
-    public function runThroughKernel($request)
+    public function runThroughKernel(Container $app, $request)
     {
-        $kernel = $this->app->make('Illuminate\Contracts\Http\Kernel');
+        $kernel = $app->make('Illuminate\Contracts\Http\Kernel');
 
         $response = $kernel->handle($request);
 
@@ -107,18 +109,19 @@ class ApiGateway extends Handler
     /**
      * Turn the given URI into a fully qualified URL.
      *
-     * @param  string $uri
      * @return string
      */
-    public function prepareUrlForRequest($uri)
+    public function prepareUrlForRequest(Container $app)
     {
+        $appBaseUrl = $app->make('config')->get('app.url');
+
+        $uri = $this->payload['path'];
+
         if (Str::startsWith($uri, '/')) {
             $uri = substr($uri, 1);
         }
 
-        if (!Str::startsWith($uri, 'http')) {
-            $uri = config('app.url') . '/' . $uri;
-        }
+        $uri = $appBaseUrl . '/' . $uri;
 
         return trim($uri, '/');
     }

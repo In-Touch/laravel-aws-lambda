@@ -2,6 +2,7 @@
 
 namespace Intouch\LaravelAwsLambda\Test\Handlers;
 
+use Mockery\Mock;
 use Intouch\LaravelAwsLambda\Test\TestCase;
 use Intouch\LaravelAwsLambda\Handlers\ApiGateway;
 
@@ -204,10 +205,11 @@ class ApiGatewayHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_non_base64_encoded_body() {
+    public function it_handles_non_base64_encoded_body()
+    {
         $payload = [
             'body' => 'I am a sample body',
-            'isBase64Encoded' => false
+            'isBase64Encoded' => false,
         ];
         $handler = new ApiGateway($payload);
 
@@ -215,13 +217,72 @@ class ApiGatewayHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_handles_a_base64_encoded_body() {
+    public function it_handles_a_base64_encoded_body()
+    {
         $payload = [
             'body' => 'SSBhbSBhIHNhbXBsZSBib2R5IHRoYXQgaXMgYmFzZTY0IGVuY29kZWQ=',
-            'isBase64Encoded' => true
+            'isBase64Encoded' => true,
         ];
         $handler = new ApiGateway($payload);
 
         $this->assertEquals('I am a sample body that is base64 encoded', $handler->getBodyFromPayload());
+    }
+
+    /**
+     * @test
+     * @dataProvider prepareUrlProvider
+     */
+    public function it_correctly_converts_request_uri_to_parsable_uri($path, $expectation)
+    {
+        $payload = [
+            'path' => $path,
+        ];
+        $handler = new ApiGateway($payload);
+
+        $this->assertEquals($expectation, $handler->prepareUrlForRequest('http://localhost'));
+    }
+
+    public function prepareUrlProvider()
+    {
+        return [
+            ['/', 'http://localhost'],
+            ['/test', 'http://localhost/test'],
+            ['/test/', 'http://localhost/test'],
+            ['test/', 'http://localhost/test'],
+            ['test', 'http://localhost/test'],
+        ];
+    }
+
+    /** @test */
+    public function it_should_pass_through_kernel_terminate_and_return()
+    {
+        $payload = json_decode($this->validJson, true);
+        $handler = \Mockery::mock('Intouch\LaravelAwsLambda\Handlers\ApiGateway')->makePartial();
+        $handler->shouldReceive('createRequest')->once()->andReturn('request');
+
+        $container = \Mockery::mock('Illuminate\Container\Container');
+        $container->shouldReceive('make')->once()->with('Illuminate\Contracts\Http\Kernel')
+            ->andReturn($kernel = \Mockery::mock('Illuminate\Foundation\Http\Kernel'));
+
+        $kernel->shouldReceive('handle')->once()->with('request')
+            ->andReturn($response = \Mockery::mock('Illuminate\Http\Response'));
+        $kernel->shouldReceive('terminate')->once()->withArgs(['request', $response]);
+
+        $response->shouldReceive('getContent')->andReturn('Return body');
+        $response->headers = \Mockery::mock('Symfony\Component\HttpFoundation\ResponseHeaderBag');
+        $response->headers->shouldReceive('allPreserveCase')->andReturn(['Content-Type'=>'application/json']);
+        $response->shouldReceive('getContent')->andReturn('Return body');
+        $response->shouldReceive('getStatusCode')->andReturn(200);
+
+        $container->shouldReceive('make')->once()->with('config')
+            ->andReturn($config = \Mockery::mock('Illuminate\Config\Repository'));
+        $config->shouldReceive('get')->once()->with('app.url')->andReturn('http://localhost');
+
+        $response = $handler->handle($container);
+
+        $this->assertJsonStringEqualsJsonString(
+            '{"body":"Return body","isBase64Encoded":false,"multiValueHeaders":{"Content-Type":"application\/json"},"statusCode":200}',
+            $response
+        );
     }
 }
