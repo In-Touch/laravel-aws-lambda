@@ -6,7 +6,6 @@ use Illuminate\Support\ServiceProvider;
 
 class LambdaServiceProvider extends ServiceProvider
 {
-
     public function boot()
     {
         $this->publishes([__DIR__.'/../config/aws-lambda.php' => config_path('aws-lambda.php')], 'config');
@@ -21,7 +20,6 @@ class LambdaServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom($this->configPath(), 'aws-lambda');
-
     }
 
     protected function configPath()

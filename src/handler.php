@@ -1,9 +1,7 @@
 <?php
 
 /**
- ***************************************************************************
- * Register The Auto Loader
- ***************************************************************************
+ * Require The Auto Loader.
  *
  * Composer provides a convenient, automatically generated class loader
  * for our application. We just need to utilize it! We'll require it
@@ -13,9 +11,7 @@
 require __DIR__.'/../../../../bootstrap/autoload.php';
 
 /**
- ***************************************************************************
- * Turn On The Lights
- ***************************************************************************
+ * Turn On The Lights.
  *
  * We need to illuminate PHP development, so let us turn on the lights.
  * This bootstraps the framework and gets it ready for use, then it
@@ -24,10 +20,8 @@ require __DIR__.'/../../../../bootstrap/autoload.php';
  */
 $app = require __DIR__.'/../../../../bootstrap/app.php';
 
-/**
- ***************************************************************************
- * Configure storage
- ***************************************************************************
+/*
+ * Configure storage.
  *
  * Lambda instantiates tasks onto a read-only filesystem, but provides 500MB
  * of non-persistent disk space at /tmp, so we reconfigure our application
@@ -36,9 +30,7 @@ $app = require __DIR__.'/../../../../bootstrap/app.php';
 $app->useStoragePath('/tmp/laravel');
 
 /**
- ***************************************************************************
- * Create working directories in /tmp
- ***************************************************************************
+ * Create working directories.
  *
  * /tmp storage is not guaranteed to be persistent, but neither is it
  * guaranteed to be clean (from previous runs) on the initialization of a
@@ -58,10 +50,8 @@ foreach ($paths as $path) {
     }
 }
 
-/**
- ***************************************************************************
- * Bootstrap the application
- ***************************************************************************
+/*
+ * Bootstrap the application.
  *
  * Regardless of whether we are going to end up processing a HTTP request
  * from API Gateway, SQS Job, or another type of task, we boostrap the
@@ -77,16 +67,16 @@ foreach ($paths as $path) {
  */
 $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
-
 /**
- ***************************************************************************
- * Declare our handler
- ***************************************************************************
+ * Declare our handler.
  *
  * Finally, after bootstrapping the application and doing all of the
  * required "setup" tasks, we declare our handler function which we can
  * invoke to process events in AWS Lambda, passing in the $app Container
  * which we previously instantiated and bootstrapped.
+ *
+ * @param $payload
+ * @return mixed
  */
 function handler($payload)
 {
