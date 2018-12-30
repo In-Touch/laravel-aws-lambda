@@ -12,10 +12,7 @@ This package adds support to run Laravel in AWS Lambda.
 ## Contents
 
 - [Installation](#installation)
-	- [Setting up the PagerDuty service](#setting-up-the-PagerDuty-service)
 - [Usage](#usage)
-    - [PagerDuty Setup](#pagerduty-setup)
-	- [Available Message methods](#available-message-methods)
 - [Changelog](#changelog)
 - [Testing](#testing)
 - [Security](#security)
