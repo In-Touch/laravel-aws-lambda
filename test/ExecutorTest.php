@@ -8,6 +8,20 @@ use Intouch\LaravelAwsLambda\Executor;
 class ExecutorTest extends TestCase
 {
     /**
+     * @param array $handlers
+     * @return \Mockery\Mock
+     */
+    protected function setupMocks(array $handlers)
+    {
+        $container = \Mockery::mock('Illuminate\Container\Container')->makePartial();
+        $container->shouldReceive('make')->with('config')
+            ->andReturn($config = \Mockery::mock('Illuminate\Config\Repository'));
+        $config->shouldReceive('get')->once()->with('aws-lambda.handlers')->andReturn($handlers);
+
+        return $container;
+    }
+
+    /**
      * @test
      * @expectedException \Exception
      * @expectedExceptionMessage Error running handler!
@@ -57,17 +71,19 @@ class ExecutorTest extends TestCase
         $executor->handle([]);
     }
 
-    /**
-     * @param array $handlers
-     * @return \Mockery\Mock
-     */
-    protected function setupMocks(array $handlers)
+    /** @test */
+    public function it_should_iterate_on_multiple_records()
     {
-        $container = \Mockery::mock('Illuminate\Container\Container')->makePartial();
-        $container->shouldReceive('make')->with('config')
-            ->andReturn($config = \Mockery::mock('Illuminate\Config\Repository'));
-        $config->shouldReceive('get')->once()->with('aws-lambda.handlers')->andReturn($handlers);
-        return $container;
+        $handlers = [
+            CountHandler::class,
+        ];
+
+        $container = $this->setupMocks($handlers);
+
+        $executor = new Executor($container);
+        $executor->handle(['Records' => [['record1'], ['record2']]]);
+
+        $this->assertEquals(2, CountHandler::$runCount);
     }
 }
 
@@ -107,5 +123,20 @@ class CanHandleHandler extends Handler
     public function handle()
     {
         return 'Handled!';
+    }
+}
+
+class CountHandler extends Handler
+{
+    public static $runCount = 0;
+
+    public function canHandle()
+    {
+        return true;
+    }
+
+    public function handle()
+    {
+        return ++self::$runCount;
     }
 }
