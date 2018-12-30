@@ -19,4 +19,4 @@ script:
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_script:
-  - php vendor/bin/php-coveralls -v -x coverage.clover
+  - php vendor/bin/php-coveralls -v -x coverage.clover -o coveralls-upload.json
