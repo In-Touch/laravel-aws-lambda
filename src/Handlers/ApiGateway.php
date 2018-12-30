@@ -10,12 +10,19 @@ use Intouch\LaravelAwsLambda\Contracts\Handler;
 
 class ApiGateway extends Handler
 {
+    /**
+     * @var Container
+     */
+    protected $app;
+
     public function canHandle()
     {
         if (
             array_key_exists('body', $this->payload) &&
             array_key_exists('path', $this->payload) &&
-            array_key_exists('headers', $this->payload)
+            array_key_exists('headers', $this->payload) &&
+            array_key_exists('requestContext', $this->payload) &&
+            !array_key_exists('elb', $this->payload['requestContext'])
         ) {
             return true;
         }
@@ -25,7 +32,7 @@ class ApiGateway extends Handler
 
     public function handle(Container $app)
     {
-        $kernel = $app->make('Illuminate\Contracts\Http\Kernel');
+        $this->app = $app;
 
         $uri = $this->prepareUrlForRequest($this->payload['path']);
 
@@ -33,14 +40,32 @@ class ApiGateway extends Handler
             $uri, $this->payload['httpMethod'],
             $this->payload['queryStringParameters'] !== null ? $this->payload['queryStringParameters'] : [],
             [], [], $this->transformHeadersToServerVars($this->payload['headers']),
-            base64_decode($this->payload['body'])
+            $this->getBodyFromPayload()
         );
+
+        $response = $this->runThroughKernel($request);
+
+        return $this->prepareResponse($response);
+    }
+
+    public function getBodyFromPayload()
+    {
+        if ($this->payload['isBase64Encoded'] === true) {
+            return base64_decode($this->payload['body']);
+        }
+
+        return $this->payload['body'];
+    }
+
+    public function runThroughKernel($request)
+    {
+        $kernel = $this->app->make('Illuminate\Contracts\Http\Kernel');
 
         $response = $kernel->handle($request);
 
         $kernel->terminate($request, $response);
 
-        return $this->prepareResponse($response);
+        return $response;
     }
 
     public function prepareResponse(Response $response)
@@ -61,7 +86,7 @@ class ApiGateway extends Handler
      * @param  array $headers
      * @return array
      */
-    protected function transformHeadersToServerVars(array $headers)
+    public function transformHeadersToServerVars(array $headers)
     {
         $server = [];
         $prefix = 'HTTP_';
@@ -69,8 +94,8 @@ class ApiGateway extends Handler
         foreach ($headers as $name => $value) {
             $name = strtr(strtoupper($name), '-', '_');
 
-            if (! starts_with($name, $prefix) && $name != 'CONTENT_TYPE') {
-                $name = $prefix.$name;
+            if (!starts_with($name, $prefix) && $name != 'CONTENT_TYPE') {
+                $name = $prefix . $name;
             }
 
             $server[$name] = $value;
@@ -85,14 +110,14 @@ class ApiGateway extends Handler
      * @param  string $uri
      * @return string
      */
-    protected function prepareUrlForRequest($uri)
+    public function prepareUrlForRequest($uri)
     {
         if (Str::startsWith($uri, '/')) {
             $uri = substr($uri, 1);
         }
 
-        if (! Str::startsWith($uri, 'http')) {
-            $uri = config('app.url').'/'.$uri;
+        if (!Str::startsWith($uri, 'http')) {
+            $uri = config('app.url') . '/' . $uri;
         }
 
         return trim($uri, '/');

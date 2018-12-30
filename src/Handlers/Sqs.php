@@ -19,6 +19,7 @@ class Sqs extends Handler
     public function handle(Container $container, Worker $worker)
     {
         $job = new LambdaSqsJob($container, $this->payload);
+
         return $worker->process('lambda', $job);
     }
 
