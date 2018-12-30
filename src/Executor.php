@@ -20,7 +20,6 @@ class Executor
     {
         $this->app = $app;
 
-
         $this->handlers = config('aws-lambda.handlers');
     }
 
@@ -34,7 +33,6 @@ class Executor
         } else {
             return $this->runHandlers($payload);
         }
-
     }
 
     private function runHandlers($payload)
