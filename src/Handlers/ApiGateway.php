@@ -2,11 +2,11 @@
 
 namespace Intouch\LaravelAwsLambda\Handlers;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use Illuminate\Container\Container;
-use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Intouch\LaravelAwsLambda\Contracts\Handler;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApiGateway extends Handler
 {

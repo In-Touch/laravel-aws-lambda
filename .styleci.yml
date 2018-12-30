@@ -4,6 +4,8 @@ disabled:
   - cast_spaces
   - not_operator_with_successor_space
   - concat_without_spaces
+  - length_ordered_imports
 
 enabled:
   - concat_with_spaces
+  - alpha_ordered_imports

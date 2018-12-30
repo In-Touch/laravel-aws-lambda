@@ -2,9 +2,9 @@
 
 namespace Intouch\LaravelAwsLambda\Queue\Jobs;
 
-use Illuminate\Queue\Jobs\Job;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Queue\Job as JobContract;
+use Illuminate\Queue\Jobs\Job;
 
 class LambdaSqsJob extends Job implements JobContract
 {

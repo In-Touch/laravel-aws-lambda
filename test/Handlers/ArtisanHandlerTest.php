@@ -2,8 +2,8 @@
 
 namespace Intouch\LaravelAwsLambda\Test\Handlers;
 
-use Intouch\LaravelAwsLambda\Test\TestCase;
 use Intouch\LaravelAwsLambda\Handlers\Artisan;
+use Intouch\LaravelAwsLambda\Test\TestCase;
 
 class ArtisanHandlerTest extends TestCase
 {

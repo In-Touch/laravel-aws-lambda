@@ -2,9 +2,8 @@
 
 namespace Intouch\LaravelAwsLambda\Test\Handlers;
 
-use Mockery\Mock;
-use Intouch\LaravelAwsLambda\Test\TestCase;
 use Intouch\LaravelAwsLambda\Handlers\ApiGateway;
+use Intouch\LaravelAwsLambda\Test\TestCase;
 
 class ApiGatewayHandlerTest extends TestCase
 {

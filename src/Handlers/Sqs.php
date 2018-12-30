@@ -2,8 +2,8 @@
 
 namespace Intouch\LaravelAwsLambda\Handlers;
 
-use Illuminate\Queue\Worker;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Queue\Worker;
 use Intouch\LaravelAwsLambda\Contracts\Handler;
 use Intouch\LaravelAwsLambda\Queue\Jobs\LambdaSqsJob;
 
