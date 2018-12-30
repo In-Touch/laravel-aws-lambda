@@ -13,12 +13,13 @@ class Sqs extends Handler
      * @param Container $container
      * @param Worker $worker
      *
+     * @return array|null
      * @throws \Throwable
      */
     public function handle(Container $container, Worker $worker)
     {
         $job = new LambdaSqsJob($container, $this->payload);
-        $worker->process('lambda', $job);
+        return $worker->process('lambda', $job);
     }
 
     public function canHandle()
