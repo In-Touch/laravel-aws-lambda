@@ -9,13 +9,6 @@ use Illuminate\Contracts\Queue\Job as JobContract;
 class LambdaSqsJob extends Job implements JobContract
 {
     /**
-     * The Amazon SQS client instance.
-     *
-     * @var \Aws\Sqs\SqsClient
-     */
-    protected $sqs;
-
-    /**
      * The Amazon SQS job instance.
      *
      * @var array
@@ -28,10 +21,8 @@ class LambdaSqsJob extends Job implements JobContract
      * @param Container $container
      * @param  array $job
      */
-    public function __construct(
-        Container $container,
-        array $job
-    ) {
+    public function __construct(Container $container, array $job)
+    {
         $this->container = $container;
         $this->job = $job;
     }
@@ -47,7 +38,8 @@ class LambdaSqsJob extends Job implements JobContract
     }
 
     /**
-     * Get the raw body string for the job.
+     * Get the raw body string for the job. We look for both `body` and
+     * `Body` because lambda does not guarantee the case of the payload.
      *
      * @return string
      */
@@ -63,7 +55,11 @@ class LambdaSqsJob extends Job implements JobContract
      */
     public function attempts()
     {
-        return (int) $this->job['Attributes']['ApproximateReceiveCount'];
+        if (array_key_exists('Attributes', $this->job)) {
+            return (int) $this->job['Attributes']['ApproximateReceiveCount'];
+        }
+
+        return (int) $this->job['attributes']['ApproximateReceiveCount'];
     }
 
     /**
@@ -73,7 +69,11 @@ class LambdaSqsJob extends Job implements JobContract
      */
     public function getJobId()
     {
-        return $this->job['MessageId'];
+        if (array_key_exists('MessageId', $this->job)) {
+            return $this->job['MessageId'];
+        }
+
+        return $this->job['messageId'];
     }
 
     /**
