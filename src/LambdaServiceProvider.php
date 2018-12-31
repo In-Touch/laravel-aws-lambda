@@ -8,8 +8,8 @@ class LambdaServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->publishes([__DIR__.'/../config/aws-lambda.php' => config_path('aws-lambda.php')], 'config');
-        $this->publishes([__DIR__.'/../handler/handler.php' => base_path('handler.php')], 'handler');
+        $this->publishes([__DIR__ . '/../config/aws-lambda.php' => config_path('aws-lambda.php')], 'config');
+        $this->publishes([__DIR__ . '/../handler/handler.php' => base_path('handler.php')], 'handler');
     }
 
     /**
@@ -24,6 +24,6 @@ class LambdaServiceProvider extends ServiceProvider
 
     protected function configPath()
     {
-        return __DIR__.'/../config/aws-lambda.php';
+        return __DIR__ . '/../config/aws-lambda.php';
     }
 }

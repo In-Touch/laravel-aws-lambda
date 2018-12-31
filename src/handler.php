@@ -8,7 +8,7 @@
  * into the script here so that we do not have to worry about the
  * loading of any our classes "manually". Feels great to relax.
  */
-require __DIR__.'/../../../../bootstrap/autoload.php';
+require __DIR__ . '/../../../../bootstrap/autoload.php';
 
 /**
  * Turn On The Lights.
@@ -18,7 +18,7 @@ require __DIR__.'/../../../../bootstrap/autoload.php';
  * will load up this application so that we can run it and send
  * the responses back to the browser and delight our users.
  */
-$app = require __DIR__.'/../../../../bootstrap/app.php';
+$app = require __DIR__ . '/../../../../bootstrap/app.php';
 
 /*
  * Configure storage.
@@ -45,7 +45,7 @@ $paths = [
     '/tmp/laravel/logs',
 ];
 foreach ($paths as $path) {
-    if (! file_exists($path)) {
+    if (!file_exists($path)) {
         mkdir($path, 0777, true);
     }
 }
