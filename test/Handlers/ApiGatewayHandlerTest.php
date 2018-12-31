@@ -127,32 +127,6 @@ class ApiGatewayHandlerTest extends TestCase
     }
 
     /** @test */
-    public function handler_creates_a_valid_request_object()
-    {
-        $this->markTestIncomplete('should refactor out into helper, and test');
-    }
-
-    /** @test */
-    public function converts_a_response_object()
-    {
-        $kernel = \Mockery::mock('Illuminate\Foundation\Http\Kernel');
-
-        $this->markTestIncomplete();
-    }
-
-    /** @test */
-    public function converts_a_json_response_object()
-    {
-        $this->markTestIncomplete();
-    }
-
-    /** @test */
-    public function handles_payload()
-    {
-        $this->markTestIncomplete('should test the returned response that comes out of the mock is sent up');
-    }
-
-    /** @test */
     public function it_coverts_headers_json_to_a_server_array_of_headers()
     {
         $payload = json_decode($this->validJson, true);
