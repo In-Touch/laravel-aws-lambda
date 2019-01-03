@@ -37,7 +37,7 @@ class Executor
     private function runHandlers($payload)
     {
         foreach ($this->handlers as $handler) {
-            $instance = $this->app->make($handler, [$payload]);
+            $instance = new $handler($payload);
 
             if ($instance->canHandle($payload)) {
                 return $this->app->call([$instance, 'handle']);
