@@ -22,7 +22,7 @@
   },
   "require": {
     "ext-json": "^1.4",
-    "illuminate/support": ">5.1.0 <=5.7"
+    "illuminate/support": ">5.1.0 <5.8"
   },
   "require-dev": {
     "laravel/framework": ">5.1.0 <5.2",
