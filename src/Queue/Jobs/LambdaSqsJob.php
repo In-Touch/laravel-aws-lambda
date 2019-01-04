@@ -28,6 +28,18 @@ class LambdaSqsJob extends Job implements JobContract
     }
 
     /**
+     * Fire the job.
+     * We implement this here, and pass it up to the parent to allow the class to be loaded in older versions
+     * of Laravel without triggering a fatal error. Those versions of Laravel use the LambadaSqsJobFiveOne class.
+     *
+     * @return void
+     */
+    public function fire()
+    {
+        parent::fire();
+    }
+
+    /**
      * Get the raw body string for the job. We look for both `body` and
      * `Body` because lambda does not guarantee the case of the payload.
      *
