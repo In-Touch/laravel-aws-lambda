@@ -2,12 +2,16 @@
 
 namespace Intouch\LaravelAwsLambda\Contracts;
 
-abstract class Handler implements IHandler
+abstract class Handler
 {
     protected $payload;
 
-    public function __construct($payload)
+    public function setPayload($payload)
     {
         $this->payload = $payload;
     }
+
+    abstract function canHandle();
+
+//    abstract function  handle();
 }

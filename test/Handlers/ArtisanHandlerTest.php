@@ -17,7 +17,8 @@ class ArtisanHandlerTest extends TestCase
     {
         $payload = json_decode($this->validJson, true);
 
-        $handler = new Artisan($payload);
+        $handler = new Artisan();
+        $handler->setPayload($payload);
         $this->assertTrue($handler->canHandle());
     }
 
@@ -30,7 +31,9 @@ class ArtisanHandlerTest extends TestCase
 
         $payload = json_decode($this->validJson, true);
 
-        $handler = new Artisan($payload);
+        $handler = new Artisan();
+        $handler->setPayload($payload);
+
         $retval = $handler->handle($kernel);
 
         // Artisan commands should return an exit code of 0

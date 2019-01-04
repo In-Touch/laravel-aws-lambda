@@ -33,7 +33,8 @@ class SqsHandlerTest extends TestCase
     {
         $payload = json_decode($this->validJson, true);
 
-        $handler = new Sqs($payload);
+        $handler = new Sqs();
+        $handler->setPayload($payload);
 
         $this->assertTrue($handler->canHandle());
     }
@@ -46,7 +47,8 @@ class SqsHandlerTest extends TestCase
 
         $payload = json_decode($this->validJson, true);
 
-        $handler = new Sqs($payload);
+        $handler = new Sqs();
+        $handler->setPayload($payload);
         $return = $handler->handle(\Mockery::mock('Illuminate\Container\Container'), $worker);
 
         $this->assertEquals(['job' => 'jobObjectHere', 'failed' => false], $return);

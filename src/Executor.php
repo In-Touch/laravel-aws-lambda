@@ -3,6 +3,7 @@
 namespace Intouch\LaravelAwsLambda;
 
 use Illuminate\Contracts\Container\Container;
+use Intouch\LaravelAwsLambda\Contracts\Handler;
 
 class Executor
 {
@@ -37,9 +38,11 @@ class Executor
     private function runHandlers($payload)
     {
         foreach ($this->handlers as $handler) {
-            $instance = new $handler($payload);
+            /** @var Handler $instance */
+            $instance = $this->app->make($handler);
+            $instance->setPayload($payload);
 
-            if ($instance->canHandle($payload)) {
+            if ($instance->canHandle()) {
                 return $this->app->call([$instance, 'handle']);
             }
         }
