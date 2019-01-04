@@ -11,7 +11,7 @@ abstract class Handler
         $this->payload = $payload;
     }
 
-    abstract function canHandle();
+    abstract public function canHandle();
 
 //    abstract function  handle();
 }

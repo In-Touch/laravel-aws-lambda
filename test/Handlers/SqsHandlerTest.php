@@ -49,7 +49,7 @@ class SqsHandlerTest extends TestCase
 
         $handler = new Sqs();
         $handler->setPayload($payload);
-        $return = $handler->handle(\Mockery::mock('Illuminate\Container\Container'), $worker);
+        $return = $handler->handle($app = \Mockery::mock('Illuminate\Foundation\Application')->makePartial(), $worker);
 
         $this->assertEquals(['job' => 'jobObjectHere', 'failed' => false], $return);
     }
