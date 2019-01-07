@@ -2,7 +2,6 @@
 
 namespace Intouch\LaravelAwsLambda\Test\Handlers;
 
-use Intouch\LaravelAwsLambda\Queue\Jobs\LambdaSqsJob;
 use Intouch\LaravelAwsLambda\Test\TestCase;
 
 class LambdaSqsJobFiveOneTest extends TestCase

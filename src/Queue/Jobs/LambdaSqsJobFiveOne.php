@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lwaite
- * Date: 2019-01-04
- * Time: 16:40
- */
 
 namespace Intouch\LaravelAwsLambda\Queue\Jobs;
 

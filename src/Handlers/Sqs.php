@@ -29,7 +29,6 @@ class Sqs extends Handler
 
             return $worker->process('lambda', $job);
         }
-
     }
 
     public function canHandle()
