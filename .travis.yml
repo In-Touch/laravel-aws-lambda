@@ -19,7 +19,6 @@ matrix:
       env: LARAVEL_VERSION="5.1.0" COMPOSER_FLAGS=""
 
 before_script:
-  - travis_retry composer self-update
   - travis_retry composer require laravel/framework ${LARAVEL_VERSION}
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
