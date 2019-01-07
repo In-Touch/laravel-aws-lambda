@@ -1,18 +1,27 @@
 language: php
 
 php:
-  - 7.0
-  - 7.1
-  - 7.2
   - 7.3
 
 env:
-  matrix:
-    - COMPOSER_FLAGS="--prefer-lowest"
-    - COMPOSER_FLAGS=""
+  - LARAVEL_VERSION="~5.5.0" COMPOSER_FLAGS="--prefer-lowest"
+  - LARAVEL_VERSION="~5.5.0" COMPOSER_FLAGS=""
+  - LARAVEL_VERSION="~5.6.0" COMPOSER_FLAGS="--prefer-lowest"
+  - LARAVEL_VERSION="~5.6.0" COMPOSER_FLAGS=""
+  - LARAVEL_VERSION="~5.7.0" COMPOSER_FLAGS="--prefer-lowest"
+  - LARAVEL_VERSION="~5.7.0" COMPOSER_FLAGS=""
+
+matrix:
+  include:
+    - php: 7.0
+      env: LARAVEL_VERSION="~5.1.0" COMPOSER_FLAGS=""
+    - php: 7.1
+      env: LARAVEL_VERSION="~5.7.0" COMPOSER_FLAGS=""
+    - php: 7.2
+      env: LARAVEL_VERSION="~5.7.0" COMPOSER_FLAGS=""
 
 before_script:
-  - travis_retry composer self-update
+  - travis_retry composer require laravel/framework ${LARAVEL_VERSION}
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
 script:

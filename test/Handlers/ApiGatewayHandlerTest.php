@@ -76,7 +76,8 @@ class ApiGatewayHandlerTest extends TestCase
     {
         $payload = json_decode($this->validJson, true);
 
-        $handler = new ApiGateway($payload);
+        $handler = new ApiGateway();
+        $handler->setPayload($payload);
         $this->assertTrue($handler->canHandle());
     }
 
@@ -122,7 +123,9 @@ class ApiGatewayHandlerTest extends TestCase
 
         $payload = json_decode($payload, true);
 
-        $handler = new ApiGateway($payload);
+        $handler = new ApiGateway();
+        $handler->setPayload($payload);
+
         $this->assertFalse($handler->canHandle());
     }
 
@@ -130,7 +133,9 @@ class ApiGatewayHandlerTest extends TestCase
     public function it_coverts_headers_json_to_a_server_array_of_headers()
     {
         $payload = json_decode($this->validJson, true);
-        $handler = new ApiGateway($payload);
+
+        $handler = new ApiGateway();
+        $handler->setPayload($payload);
 
         $this->assertEquals(
             [
@@ -161,7 +166,8 @@ class ApiGatewayHandlerTest extends TestCase
     public function it_coverts_headers_json_to_a_server_array_of_headers_not_prefixing_content_type()
     {
         $payload = json_decode($this->validJson, true);
-        $handler = new ApiGateway($payload);
+        $handler = new ApiGateway();
+        $handler->setPayload($payload);
         $headers = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
@@ -184,7 +190,8 @@ class ApiGatewayHandlerTest extends TestCase
             'body' => 'I am a sample body',
             'isBase64Encoded' => false,
         ];
-        $handler = new ApiGateway($payload);
+        $handler = new ApiGateway();
+        $handler->setPayload($payload);
 
         $this->assertEquals('I am a sample body', $handler->getBodyFromPayload());
     }
@@ -196,7 +203,8 @@ class ApiGatewayHandlerTest extends TestCase
             'body' => 'SSBhbSBhIHNhbXBsZSBib2R5IHRoYXQgaXMgYmFzZTY0IGVuY29kZWQ=',
             'isBase64Encoded' => true,
         ];
-        $handler = new ApiGateway($payload);
+        $handler = new ApiGateway();
+        $handler->setPayload($payload);
 
         $this->assertEquals('I am a sample body that is base64 encoded', $handler->getBodyFromPayload());
     }
@@ -212,7 +220,8 @@ class ApiGatewayHandlerTest extends TestCase
             ->andReturn($config = \Mockery::mock('Illuminate\Config\Repository'));
         $config->shouldReceive('get')->once()->with('app.url')->andReturn('http://localhost');
 
-        $handler = new ApiGateway([
+        $handler = new ApiGateway();
+        $handler->setPayload([
             'path' => $path,
         ]);
 

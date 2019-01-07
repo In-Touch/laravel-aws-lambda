@@ -31,24 +31,6 @@ class LambdaSqsJobTest extends TestCase
     }';
 
     /** @test */
-    public function it_should_pass_fire_up_to_resolve_and_fire_parent_method_with_valid_payload()
-    {
-        $container = \Mockery::mock('Illuminate\Container\Container');
-        $job = \Mockery::mock('Intouch\LaravelAwsLambda\Queue\Jobs\LambdaSqsJob',
-            [
-                $container,
-                json_decode($this->validJson, true),
-            ])->makePartial()->shouldAllowMockingProtectedMethods();
-
-        $job->shouldReceive('resolveAndFire')->once()->with([
-            'job' => 'CallQueuedHandler@call',
-            'data' => ['command' => 'A serialized payload'],
-        ]);
-
-        $this->assertNull($job->fire());
-    }
-
-    /** @test */
     public function get_raw_body_call_should_properly_pass_lowercase_body_param()
     {
         $payload = json_decode($this->validJson, true);
